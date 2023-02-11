@@ -5,4 +5,4 @@ https://dev.mysql.com/downloads/connector/j/
 
 
 command to run:
-> docker-compose.up
+> docker-compose up
