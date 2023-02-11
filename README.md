@@ -2,7 +2,7 @@ ELK setup with MYSQL syncing
 
 DEMO VIDEO LINK: 
 
-[![VIDEO RENDER](https://img.youtube.com/vi/pYq28EXnD1g/0.jpg)](https://www.youtube.com/watch?v=pYq28EXnD1g)
+[![VIDEO RENDER](https://img.youtube.com/vi/AaEZ35mJQ94/0.jpg)](https://www.youtube.com/watch?v=AaEZ35mJQ94)
 
 
 
