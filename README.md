@@ -11,4 +11,5 @@ https://dev.mysql.com/downloads/connector/j/
 
 
 command to run:
+> npm i
 > docker-compose up
