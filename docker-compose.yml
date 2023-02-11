@@ -1,0 +1,78 @@
+version: '3.9'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.8
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-cluster-7
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+      - xpack.security.enabled=false
+      - ELASTIC_PASSWORD=testtest
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - es-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.8
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    networks:
+      - es-network
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash-oss:7.17.8
+    command: bin/logstash-plugin install logstash-input-jdbc\
+    command: apt-get update
+    #command: apt-get install -y /tmp/mysql-connector-java-5.1.38.jar
+    command: logstash -f /etc/logstash/logstash.conf
+    volumes:
+      - ./mysql-connector:/etc/logstash/mysql-connector
+      - ./logstash.conf:/etc/logstash/logstash.conf
+    ports:
+      - "5000:5000"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - es-network
+    depends_on:
+      - elasticsearch
+    links:
+      - elasticsearch
+
+  mysql:
+    image: mysql:latest
+    container_name: docker-mysql-db
+    ports:
+      - "3306:3306"
+    networks:
+      - es-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: disco
+      MYSQL_PASSWORD: disco
+      MYSQL_ROOT_HOST: 'http://mysql:3306'
+
+volumes:
+  es-data01:
+    driver: local
+  mysql-data:
+
+
+networks:
+  es-network:
+    driver: bridge
